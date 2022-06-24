@@ -70,7 +70,8 @@ router.post('/', upload.single('coverArt'), (req, res, next) => {
 
         } else {
             res.status(400).json({
-                message: "No artist with matching id"
+                message: "No artist with matching id found"
+
             });
         }
 
