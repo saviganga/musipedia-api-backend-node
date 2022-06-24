@@ -1,0 +1,6 @@
+{
+    "env": {
+        "DB_PASSWORD": "deGanGa18",
+        "JWT_SECRET_KEY": "deGanGa18"
+    }
+}
