@@ -11,7 +11,7 @@ const User = mongoose.Schema({
     },
     password: {type: String, required: true},
     dateJoined: {type: Date, required: true, default: Date.now()},
-    image: {type: String, required: true}
+    image: {type: String, required: false}
 });
 
 module.exports = mongoose.model('User', User);
