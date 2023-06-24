@@ -88,6 +88,7 @@ exports.get_artist =  (req, res, next) => {
 
 exports.delete_artist = (req, res, next) => {
     const id = req.params.artistId
+    console.log(id)
     if (id === 'wizkid') {
         res.status(400).json({
             message: 'Cannot delete Big Wiz'

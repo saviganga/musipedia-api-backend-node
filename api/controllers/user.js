@@ -1,4 +1,7 @@
 const UserModel = require('../models/user');
+const bcrypt = require('bcrypt');
+const mongoose = require('mongoose');
+
 
 
 exports.create_user = (req, res, next) => {
@@ -10,7 +13,7 @@ exports.create_user = (req, res, next) => {
         console.log(result);
         if (result.length >= 1) {
             return res.status(400).json({
-                message: "Bad Request",
+                message: "Bad request",
             })
         } else {
             bcrypt.hash(req.body.password, 10, (err, hash) => {
@@ -26,7 +29,7 @@ exports.create_user = (req, res, next) => {
                         lastName: req.body.lastName,
                         email: req.body.email,
                         password: hash,
-                        image: req.file.path
+                        // image: req.files.path
                     };
         
                     const user = new UserModel({
@@ -35,7 +38,7 @@ exports.create_user = (req, res, next) => {
                         lastName: userData.lastName,
                         email: userData.email,
                         password: userData.password,
-                        image: userData.image
+                        // image: userData.image
                     });
         
                     user.save()
@@ -48,7 +51,7 @@ exports.create_user = (req, res, next) => {
                                 firstName: user.firstName,
                                 lastName: user.lastName,
                                 email: user.email,
-                                image: user.image
+                                // image: user.image
                             }
                         });
                     })

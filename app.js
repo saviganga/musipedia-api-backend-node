@@ -14,9 +14,16 @@ const albumRoutes = require('./api/routes/albums');
 const songRoutes = require('./api/routes/songs');
 const userRoutes = require('./api/routes/user');
 const xauthRoutes = require('./api/routes/xauth');
-
+console.log(process.env.MONGO_ATLAS_URL)
 // make a connection to the mongoBD database
-mongoose.connect('mongodb+srv://saviganga:' + process.env.DB_PASSWORD + '@musipediadb.yjiqo.mongodb.net/?retryWrites=true&w=majority');
+mongoose.set("strictQuery", false);
+mongoose.connect(process.env.MONGO_ATLAS_URL)
+  .then(() => console.log(`[Database connection]: Connected correctly to Cloud server for musipedia..`))
+  .catch(error => console.log(`Connection error to Cloud Server. [Issue]: ${error}`));
+
+
+  // mongoose.connect('mongodb+srv://saviganga:casa1234@musipediadb.yjiqo.mongodb.net/?retryWrites=true&w=majority')
+// mongoose.connect('mongodb+srv://saviganga:' + process.env.DB_PASSWORD + '@musipediadb.yjiqo.mongodb.net/?retryWrites=true&w=majority');
 
 // setting the logs
 app.use(morgan('dev'));

@@ -26,7 +26,7 @@ const upload = multer({storage: storage});
 router.get('/', albumController.get_albums);
 router.post('/', checkAuth, upload.single("albumArt"), albumController.create_album);
 
-router.get('/:albumId', checkAuth, albumController.get_album);
+router.get('/:albumId', albumController.get_album);
 
 router.delete('/:albumId', checkAuth, albumController.delete_album);
 
