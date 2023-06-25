@@ -30,6 +30,6 @@ router.post('/', checkAuth, upload.single("image"), artistController.create_arti
 
 router.get('/:artistId', checkAuth, artistController.get_artist);
 
-router.delete('/:artistId', checkAuth, artistController.delete_artist);
+router.delete('/:artistId', artistController.delete_artist);
 
 module.exports = router;

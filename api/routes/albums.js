@@ -28,7 +28,7 @@ router.post('/', checkAuth, upload.single("albumArt"), albumController.create_al
 
 router.get('/:albumId', albumController.get_album);
 
-router.delete('/:albumId', checkAuth, albumController.delete_album);
+router.delete('/:albumId', albumController.delete_album);
 
 
 

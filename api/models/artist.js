@@ -7,7 +7,7 @@ const Artist = mongoose.Schema({
     lastName: {type: String, required: true},
     stageName: {type: String, required: true},
     DOB: {type: Date, required: true},
-    image: {type: String, required: true}
+    image: {type: String, required: false}
 });
 
 module.exports = mongoose.model('Artist', Artist);

@@ -1,4 +1,7 @@
 const AlbumModel = require('../models/album');
+const ArtistModel = require('../models/artist');
+const mongoose = require('mongoose');
+
 
 
 exports.get_albums = (req, res, next) => {
@@ -38,7 +41,7 @@ exports.get_albums = (req, res, next) => {
 exports.create_album = (req, res, next) => {
     console.log(req.file);
     const artistId = req.body.artist;
-    AtristModel.findById(artistId)
+    ArtistModel.findById(artistId)
     .exec()
     .then(artist => {
         console.log(artist);
@@ -49,7 +52,7 @@ exports.create_album = (req, res, next) => {
                 artist: req.body.artist,
                 songs: req.body.songs,
                 year: req.body.year,
-                albumArt: req.file.path
+                // albumArt: req.file.path
             };
 
             // create the object in the db
@@ -60,7 +63,7 @@ exports.create_album = (req, res, next) => {
                     artist: albumData.artist,
                     songs: albumData.songs,
                     year: albumData.year,
-                    albumArt: albumData.albumArt,
+                    // albumArt: albumData.albumArt,
                 }
             );
 
@@ -112,9 +115,22 @@ exports.get_album = (req, res, next) => {
 };
 
 exports.delete_album = (req, res, next) => {
-    const id = req.params.albumId;
-    res.status(200).json({
-        message: 'Deleted album',
-        album: id
-    });
+    const albumId = req.params.albumId;
+    AlbumModel.remove({
+        _id: albumId
+    })
+    .exec()
+    .then(result => {
+        res.status(204).json({
+            message: "Deleted album"
+        });
+    })
+    .catch(error => {
+        console.log(error);
+        res.status(400).json({
+            message: "Unable to delete album",
+            data: error
+        });
+    })
+    
 };

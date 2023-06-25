@@ -1,3 +1,4 @@
+const mongoose = require('mongoose');
 const ArtistModel = require('../models/artist');
 
 
@@ -8,7 +9,7 @@ exports.create_artist = (req, res, next) => {
         lastName: req.body.lastName,
         stageName: req.body.stageName,
         DOB: req.body.DOB,
-        image: req.file.path
+        // image: req.file.path
 
     };
 
@@ -20,7 +21,7 @@ exports.create_artist = (req, res, next) => {
             lastName: artistData.lastName,
             stageName: artistData.stageName,
             DOB: artistData.DOB,
-            image: artistData.image
+            // image: artistData.image
         }      
     );
 
@@ -87,16 +88,25 @@ exports.get_artist =  (req, res, next) => {
 };
 
 exports.delete_artist = (req, res, next) => {
-    const id = req.params.artistId
-    console.log(id)
-    if (id === 'wizkid') {
+    
+
+    const artistId = req.params.artistId;
+
+    ArtistModel.remove({
+        _id: artistId
+    })
+    .exec()
+    .then(result => {
+        res.status(204).json({
+            message: "Deleted artist"
+        });
+    })
+    .catch(error => {
+        console.log(error);
         res.status(400).json({
-            message: 'Cannot delete Big Wiz'
+            message: "Unable to delete artist",
+            data: error
         });
-    } else {
-        res.status(200).json({
-            message: 'Deleted the motherfucker',
-            artist: id
-        });
-    }
+    })
+
 };

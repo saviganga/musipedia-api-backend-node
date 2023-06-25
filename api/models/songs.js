@@ -9,8 +9,13 @@ const Song = mongoose.Schema({
         ref: 'Artist',
         required: true
     },
+    album: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Album',
+        required: false
+    },
     year: {type: Date, required: true},
-    coverArt: {type: String, required: true}
+    coverArt: {type: String, required: false}
 });
 
 module.exports = mongoose.model('Song', Song);

@@ -30,7 +30,7 @@ router.post('/', checkAuth, upload.single('coverArt'), songControllers.create_so
 
 router.get('/:songId', checkAuth, songControllers.get_song);
 
-router.delete('/:songId', checkAuth, songControllers.delete_song);
+router.delete('/:songId', songControllers.delete_song);
 
 
 module.exports = router;

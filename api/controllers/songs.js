@@ -1,8 +1,12 @@
 const SongModel = require('../models/songs');
 const ArtistModel = require('../models/artist')
+const AlbumModel = require('../models/album')
+const mongoose = require('mongoose');
+
 
 exports.create_song = (req, res, next) => {
     console.log(req.file);
+    const albumId = req.body.albumId
     const artistId = req.body.artist;
     ArtistModel.findById(artistId)
     .exec()
@@ -13,7 +17,7 @@ exports.create_song = (req, res, next) => {
                 name: req.body.name,
                 artist: req.body.artist,
                 year: req.body.year,
-                coverArt: req.file.path
+                // coverArt: req.file.path
             };
 
             // crete the song object
@@ -22,7 +26,7 @@ exports.create_song = (req, res, next) => {
                 name: songData.name,
                 artist: songData.artist,
                 year: songData.year,
-                coverArt: songData.coverArt
+                // coverArt: songData.coverArt
             });
 
             return song.save()
@@ -95,9 +99,22 @@ exports.get_song = (req, res, next) => {
 };
 
 exports.delete_song = (req, res, next) => {
-    const id = req.params.songId;
-    res.status(200).json({
-        message: 'Deleted song',
-        album: id
-    });
+    const songId = req.params.songId;
+
+    SongModel.remove({
+        _id: songId
+    })
+    .exec()
+    .then(result => {
+        res.status(204).json({
+            message: "Deleted song"
+        });
+    })
+    .catch(error => {
+        console.log(error);
+        res.status(400).json({
+            message: "Unable to delete song",
+            data: error
+        });
+    })
 };
