@@ -4,59 +4,66 @@ const bcrypt = require('bcrypt');
 
 
 
-exports.login = (req, res, next) => {
+exports.login = async(req, res, next) => {
 
-    // find the user trying to log in
-    userModel.find({email: req.body.email})
-    .exec()
-    .then(result => {
-        console.log(result);
-        if (result < 1) {
-            return res.status(400).json({
-                messsage: "Invalid Credentials"
-            });
-        } else {
-            user = result[0];
-            bcrypt.compare(req.body.password, user.password, function(err, result) {
-                
-                if (err) {
-                    console.log(err);
-                    return res.status(400).json({
-                        message: "Bad Auth",
-                        data: err
-                    });
-                }
+    try {
 
-                if (result) {
-                    console.log(result);
-                    userToken = jwt.sign(
-                        {
-                            email: user.email,
-                            lastName: user.lastName,
-                            userId: user._id
-                        },
-                        process.env.JWT_SECRET_KEY,
-                        {
-                            expiresIn: "1hr"
-                        }
-                    );
-                    return res.status(200).json({
-                        message: "Login Successful",
-                        token: userToken
-                    });
-                }
+        const userr = await userModel.find({email: req.body.email})
+        const user = userr[0]
 
-                res.status(400).json({
-                    message: "Bad Request"
-                });
-
-            });
+        if (!user) {
+            return res.status(401).json({
+                "status": "FAILED",
+                "message": "Invalid credentials"
+            })
         }
-    })
-    .catch(error => {
-        console.log(error);
-        res.status(400).json({
-            message: "Bad"
-        });
-    })
+
+        bcrypt.compare(req.body.password, user.password, function(err, result) {
+            if (err) {
+                console.log(err)
+                return res.status(401).json({
+                    status: "FAILED",
+                    message: "Unauthenticated user",
+                    data: err
+                })
+            }
+
+            if (result) {
+                userToken = jwt.sign(
+                    {
+                        email: user.email,
+                        lastName: user.lastName,
+                        userId: user._id
+                    },
+                    process.env.JWT_SECRET_KEY,
+                    {
+                        expiresIn: "1hr"
+                    }
+                )
+    
+                return res.status(200).json({
+                    status: "SUCCESS",
+                    message: "Login successful",
+                    token: userToken,
+                    userId: user._id
+    
+                })
+            }
+
+            res.status(401).json(
+                {status: "FAILED", message: "bad auth"}
+            )
+        }
+        )
+
+
+    } catch (error) {
+        res.status(500).json({
+            status: "FAILED",
+            message: "Server error",
+            data: error
+        })
+    }
+
+    
 };

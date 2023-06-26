@@ -4,53 +4,60 @@ const mongoose = require('mongoose');
 
 
 
-exports.create_user = (req, res, next) => {
+exports.create_user = async(req, res, next) => {
     console.log(req.body);
     console.log(req.file);
-    UserModel.find({email: req.body.email})
-    .exec()
-    .then(result => {
-        console.log(result);
-        if (result.length >= 1) {
+
+    try {
+
+        const userr = await UserModel.find({email: req.body.email})
+
+        if (userr.length > 0) {
             return res.status(400).json({
-                message: "Bad request",
+                status: "FAILED",
+                message: "Oops! User with this email already exists"
             })
-        } else {
-            bcrypt.hash(req.body.password, 10, (err, hash) => {
+        }
+
+        const user = userr[0]
+
+        bcrypt.hash(req.body.password, 10, (err, hash) => 
+            {
                 if (err) {
                     return res.status(400).json({
-                        message: "unable to save password",
-                        error: err
-                    });
-                } else {
-                    // collect data from the request body and create the user
-                    const userData = {
-                        firstName: req.body.firstName,
-                        lastName: req.body.lastName,
-                        email: req.body.email,
-                        password: hash,
-                        // image: req.files.path
-                    };
-        
-                    const user = new UserModel({
+                        status: "FAILED",
+                        message: "password hash error"
+                    })
+                }
+
+                const userData = {
+                    firstName: req.body.firstName,
+                    lastName: req.body.lastName,
+                    email: req.body.email,
+                    password: hash
+                }
+
+                const newUser = new UserModel(
+                    {
                         _id: new mongoose.Types.ObjectId(),
                         firstName: userData.firstName,
                         lastName: userData.lastName,
                         email: userData.email,
-                        password: userData.password,
-                        // image: userData.image
-                    });
-        
-                    user.save()
+                        password: userData.password
+                    }
+                )
+
+                newUser.save()
                     .then(result => {
                         console.log(result);
                         res.status(201).json({
+                            status: "SUCCESS",
                             message: "Successfully created User Profile",
                             data: {
-                                _id: user._id,
-                                firstName: user.firstName,
-                                lastName: user.lastName,
-                                email: user.email,
+                                _id: newUser._id,
+                                firstName: newUser.firstName,
+                                lastName: newUser.lastName,
+                                email: newUser.email,
                                 // image: user.image
                             }
                         });
@@ -58,22 +65,21 @@ exports.create_user = (req, res, next) => {
                     .catch(error => {
                         console.log(error);
                         res.status(400).json({
+                            status: "FAILED",
                             message: "Badd Request",
                             data: error.message
                         });
                     })
-                }
-            })
-        
-        }
-    })
-    .catch(error => {
-        console.log(error);
-        res.status(400).json({
-            message: "Bad Request",
-            error: error
-        });
-    })
+            }
+        )
+
+    } catch (err) {
+        res.status(500).json({
+            status: "FAILED",
+            message: "server error",
+            data: err
+        })
+    }
 };
 
 exports.get_users = async(req, res, next) => {
