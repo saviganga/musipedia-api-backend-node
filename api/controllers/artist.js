@@ -4,6 +4,14 @@ const ArtistModel = require('../models/artist');
 
 exports.create_artist = (req, res, next) => {
     console.log(req.file);
+    const artistStageName = req.body.stageName
+    const oldArtist = ArtistModel.find({stageName: artistStageName})
+    if (oldArtist) {
+        return res.status(400).json({
+            status: "FAILED",
+            message: "Oops! An artist with this stage name already exists"
+        })
+    }
     const artistData = {
         firstName: req.body.firstName,
         lastName: req.body.lastName,
