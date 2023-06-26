@@ -4,55 +4,54 @@ const AlbumModel = require('../models/album')
 const mongoose = require('mongoose');
 
 
-exports.create_song = (req, res, next) => {
-    console.log(req.file);
-    const albumId = req.body.albumId
-    const artistId = req.body.artist;
-    ArtistModel.findById(artistId)
-    .exec()
-    .then(artist => {
-        if (artist) {
-            
-            const songData = {
-                name: req.body.name,
-                artist: req.body.artist,
-                year: req.body.year,
-                // coverArt: req.file.path
-            };
+exports.create_song = async(req, res, next) => {
 
-            // crete the song object
-            const song = new SongModel({
+    try {
+
+        // get artist stage name from request body
+        const artistStageName = req.body.artist
+        const artistt = await ArtistModel.find({stageName: artistStageName})
+        const artist = artistt[0]
+        if (!artist) {
+            return res.status(400).json({
+                status: "FAILED",
+                message: "Oops! Artist with this stage name does not exist"
+            })
+        }
+        const artistId = artist._id
+
+        // prepare the db payload
+        const songData = {
+            name: req.body.name,
+            artist: artistId,
+            year: req.body.year
+        }
+
+        // create the object in the db
+        const song = new SongModel(
+            {
                 _id: new mongoose.Types.ObjectId(),
                 name: songData.name,
                 artist: songData.artist,
                 year: songData.year,
-                // coverArt: songData.coverArt
-            });
+            }
+        );
 
-            return song.save()
+        newSong = await song.save()
 
-        } else {
-            res.status(400).json({
-                message: "No artist with matching id found"
-
-            });
-        }
-
-    })
-    .then(result => {
-        console.log(result);
-        res.status(201).json({
-            message: "Added Song",
-            song: result
+        return res.status(201).json({
+            status: "SUCCESS",
+            message: "Successfully created song",
+            data: newSong
         });
-    })
-    .catch(error => {
-        console.log(error);
-        res.status(400).json({
-            message: "Unable to add song. Please try again",
-            error: error.message
+
+    } catch (err) {
+        res.status(500).json({
+            status: "FAILED",
+            message: "Server Error"
         })
-    })
+    }
+
 };
 
 exports.get_songs = (req, res, next) => {
