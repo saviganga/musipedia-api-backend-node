@@ -38,7 +38,67 @@ exports.get_albums = (req, res, next) => {
     })
 };
 
-exports.create_album = (req, res, next) => {
+exports.create_album = async(req, res, next) => {
+
+    try {
+
+        // get artist stage name from request body
+        const artistStageName = req.body.artist
+        const artistt = await ArtistModel.find({stageName: artistStageName})
+        const artist = artistt[0]
+        if (!artist) {
+            return res.status(400).json({
+                status: "FAILED",
+                message: "Oops! Artist with this stage name does not exist"
+            })
+        }
+        const artistId = artist._id
+
+        // prepare the db payload
+        const albumData = {
+            name: req.body.name,
+            artist: artistId,
+            songs: req.body.songs,
+            year: req.body.year
+        }
+
+        // create the object in the db
+        const album = new AlbumModel(
+            {
+                _id: new mongoose.Types.ObjectId(),
+                name: albumData.name,
+                artist: albumData.artist,
+                songs: albumData.songs,
+                year: albumData.year,
+                // albumArt: albumData.albumArt,
+            }
+        );
+
+        newAlbum = await album.save()
+
+        return res.status(201).json({
+            status: "SUCCESS",
+            message: "Successfully created album",
+            data: newAlbum
+        })
+
+
+    } catch (err) {
+        res.status(500).json({
+            status: "FAILED",
+            message: "Server Error"
+        })
+    }
+
+
+
+
+
+
+
+
+
+
     console.log(req.file);
     const artistId = req.body.artist;
     ArtistModel.findById(artistId)
