@@ -89,66 +89,6 @@ exports.create_album = async(req, res, next) => {
             message: "Server Error"
         })
     }
-
-
-
-
-
-
-
-
-
-
-    console.log(req.file);
-    const artistId = req.body.artist;
-    ArtistModel.findById(artistId)
-    .exec()
-    .then(artist => {
-        console.log(artist);
-        if (artist) {
-
-            const albumData = {
-                name: req.body.name,
-                artist: req.body.artist,
-                songs: req.body.songs,
-                year: req.body.year,
-                // albumArt: req.file.path
-            };
-
-            // create the object in the db
-            const album = new AlbumModel(
-                {
-                    _id: new mongoose.Types.ObjectId(),
-                    name: albumData.name,
-                    artist: albumData.artist,
-                    songs: albumData.songs,
-                    year: albumData.year,
-                    // albumArt: albumData.albumArt,
-                }
-            );
-
-            return album.save()
-        } else {
-            res.status(400).json({
-                message: "No artist with matching id"
-            });
-        }
-    })
-    .then(result => {
-        console.log(result);
-        // return the response
-        res.status(201).json({
-            message: 'Added album',
-            album: result
-        });
-    })
-    .catch(error => {
-        console.log(error);
-        res.status(400).json({
-            message: "Unable to create album. Please try again later",
-            error: error.message
-        });
-    })
 };
 
 exports.get_album = (req, res, next) => {
