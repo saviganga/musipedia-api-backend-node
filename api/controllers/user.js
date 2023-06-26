@@ -76,48 +76,73 @@ exports.create_user = (req, res, next) => {
     })
 };
 
-exports.get_users = (req, res, next) => {
-    UserModel.find({})
-    .select("_id firstName lastName email image dateJoined")
-    .exec()
-    .then(result => {
-        console.log(result);
-        res.status(201).json({
-            message: "Successfully fetched users",
-            count: result.length,
-            data: result
-        })
+exports.get_users = async(req, res, next) => {
 
-    })
-    .catch(error => {
-        console.log(error);
-        res.status(400).json({
-            message: "Error fetching all users",
-            error: error
-        });
-    })
+    try {
 
+        // get the user from the userId returned from check auth
+        const user = await UserModel.findById(req.userId)
+
+        // confirm user exists
+        if (!user) {
+            return res.status(404).json({ status: "FAILED", message: 'User not found' });
+        }
+
+        // check if user is admin
+        if (user.isAdmin) {
+            const allUsers = await UserModel.find();
+            res.json(allUsers);
+        } else {
+            res.status(200).json({
+                status: "SUCCESS",
+                message: 'successfully fetched users',
+                data: user
+            })
+            // res.json(user)
+        }
+
+    } catch (error) {
+
+        console.error(error)
+        res.status(500).json({ status: "FAILED", message: 'Internal server error' });
+
+    }
+    
 };
 
-exports.get_user = (req, res, next) => {
-    const userId = req.params.userId;
-    UserModel.findById(userId)
-    .select()
-    .exec()
-    .then(result => {
-        console.log(result);
-        res.status(200).json({
-            message: "Successfully fetched user",
-            data: result
-        })
-    })
-    .catch(error => {
-        console.log(error);
-        res.status(400).json({
-            message: "Unable to fetch user",
-            error: error.message
-        });
-    })
+exports.get_user = async(req, res, next) => {
+
+
+    try {
+        const user = await UserModel.findById(req.userId)
+        const userId = req.params.userId
+
+        if (!user) {
+            return res.status(404).json({ status: "FAILED", message: 'User not found' });
+        }
+
+        if (user.isAdmin) {
+            const userProfile = await UserModel.findById(userId);
+            res.json(userProfile);
+        } else {
+            if (req.userId !== userId) {
+                return res.status(404).json({ status: "FAILED", message: 'cannot fetch user profile' });
+            }
+            res.status(200).json({
+                status: "SUCCESS",
+                message: 'successfully fetched user',
+                data: user
+            })
+            // res.json(user)
+        }
+
+
+    } catch (error) {
+
+        console.error(error)
+        res.status(500).json({ status: "FAILED", message: 'Internal server error' });
+
+    }
 
 };
 
