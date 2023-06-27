@@ -19,12 +19,19 @@ exports.create_song = async(req, res, next) => {
             })
         }
         const artistId = artist._id
+        let coverArtt = req.file
+        if (!coverArtt) {
+            coverArt = null
+        } else {
+            coverArt = coverArtt.path
+        }
 
         // prepare the db payload
         const songData = {
             name: req.body.name,
             artist: artistId,
-            year: req.body.year
+            year: req.body.year,
+            coverArt: coverArt
         }
 
         // create the object in the db
@@ -34,6 +41,7 @@ exports.create_song = async(req, res, next) => {
                 name: songData.name,
                 artist: songData.artist,
                 year: songData.year,
+                coverArt: songData.coverArt
             }
         );
 
