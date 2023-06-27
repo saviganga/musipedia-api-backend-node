@@ -53,13 +53,20 @@ exports.create_album = async(req, res, next) => {
             })
         }
         const artistId = artist._id
+        let albumArtt = req.file
+        if (!albumArtt) {
+            albumArt = null
+        } else {
+            albumArt = albumArtt.path
+        }
 
         // prepare the db payload
         const albumData = {
             name: req.body.name,
             artist: artistId,
             songs: req.body.songs,
-            year: req.body.year
+            year: req.body.year,
+            albumArt: albumArt
         }
 
         // create the object in the db
@@ -70,7 +77,7 @@ exports.create_album = async(req, res, next) => {
                 artist: albumData.artist,
                 songs: albumData.songs,
                 year: albumData.year,
-                // albumArt: albumData.albumArt,
+                albumArt: albumData.albumArt,
             }
         );
 
@@ -84,6 +91,7 @@ exports.create_album = async(req, res, next) => {
 
 
     } catch (err) {
+        console.log(err)
         res.status(500).json({
             status: "FAILED",
             message: "Server Error"

@@ -2,14 +2,30 @@ const mongoose = require('mongoose');
 const ArtistModel = require('../models/artist');
 
 
-exports.create_artist = (req, res, next) => {
-    console.log(req.file);
+exports.create_artist = async(req, res, next) => {
+    const artistStageName = req.body.stageName
+    const oldArtist = await ArtistModel.find({stageName: artistStageName})
+    
+    if (oldArtist.length > 0) {
+        console.log('hia')
+        return res.status(400).json({
+            status: "FAILED",
+            message: "Oops! An artist with this stage name already exists"
+        })
+    }
+
+    let imagee = req.file
+        if (!imagee) {
+            image = null
+        } else {
+            image = imagee.path
+        }
     const artistData = {
         firstName: req.body.firstName,
         lastName: req.body.lastName,
         stageName: req.body.stageName,
         DOB: req.body.DOB,
-        // image: req.file.path
+        image: image
 
     };
 
@@ -21,7 +37,7 @@ exports.create_artist = (req, res, next) => {
             lastName: artistData.lastName,
             stageName: artistData.stageName,
             DOB: artistData.DOB,
-            // image: artistData.image
+            image: artistData.image
         }      
     );
 
