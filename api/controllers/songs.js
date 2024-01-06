@@ -68,7 +68,7 @@ exports.get_songs = (req, res, next) => {
     .populate('artist', '_id stageName')
     .exec()
     .then(allSongs => {
-        console.log(allSongs);
+        // console.log(allSongs);
         res.status(200).json({
             status: "SUCCESS",
             message: "Fetched all songs",
@@ -76,7 +76,7 @@ exports.get_songs = (req, res, next) => {
         });
     })
     .catch(error => {
-        console.log(error);
+        // console.log(error);
         res.status(400).json({
             message: "Bad Request"
         });
@@ -90,7 +90,7 @@ exports.get_song = (req, res, next) => {
     .populate('artist', '_id stageName image')
     .exec()
     .then(thisSong => {
-        console.log(thisSong);
+        // console.log(thisSong);
         res.status(200).json({
             status: "SUCCESS",
             message: "Fetched song",
@@ -98,7 +98,7 @@ exports.get_song = (req, res, next) => {
         });
     })
     .catch(error => {
-        console.log(error);
+        // console.log(error);
         res.status(400).json({
             message: "Bad Request"
         });
@@ -118,7 +118,7 @@ exports.delete_song = (req, res, next) => {
         });
     })
     .catch(error => {
-        console.log(error);
+        // console.log(error);
         res.status(400).json({
             message: "Unable to delete song",
             data: error
