@@ -14,7 +14,7 @@ exports.get_albums = (req, res, next) => {
     .populate('artist', '_id stageName')
     .exec()
     .then(allAlbums => {
-        console.log(allAlbums);
+        // console.log(allAlbums);
         if (allAlbums.length < 1) {
             return res.status(200).json({
                 message: "Fetched all albums",
@@ -30,7 +30,7 @@ exports.get_albums = (req, res, next) => {
         }
     })
     .catch(error => {
-        console.log(error);
+        // console.log(error);
         res.status(400).json({
             message: "Bad Request",
             error: error.message
@@ -106,7 +106,7 @@ exports.get_album = (req, res, next) => {
     .populate('artist', '_id stageName image')
     .exec()
     .then(thisAlbum => {
-        console.log(thisAlbum);
+        // console.log(thisAlbum);
         res.status(200).json({
             status: "SUCCESS",
             message: "Fetched album",
@@ -114,7 +114,7 @@ exports.get_album = (req, res, next) => {
         });
     })
     .catch(error => {
-        console.log(error);
+        // console.log(error);
         res.status(400).json({
             message: "Bad Request",
             error: error
@@ -134,7 +134,7 @@ exports.delete_album = (req, res, next) => {
         });
     })
     .catch(error => {
-        console.log(error);
+        // console.log(error);
         res.status(400).json({
             message: "Unable to delete album",
             data: error

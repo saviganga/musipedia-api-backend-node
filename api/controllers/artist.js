@@ -7,7 +7,6 @@ exports.create_artist = async(req, res, next) => {
     const oldArtist = await ArtistModel.find({stageName: artistStageName})
     
     if (oldArtist.length > 0) {
-        console.log('hia')
         return res.status(400).json({
             status: "FAILED",
             message: "Oops! An artist with this stage name already exists"
@@ -45,14 +44,14 @@ exports.create_artist = async(req, res, next) => {
     
     artist.save()
     .then(result => {
-        console.log(result);
+        // console.log(result);
         res.status(201).json({
             message: "New Artist Created",
             artist: result
         });
     })
     .catch(error => {
-        console.log(error);
+        // console.log(error);
         res.status(401).json({
             message: "Unable to create artist",
             error: error.message
@@ -67,7 +66,7 @@ exports.get_artists = (req, res, next) => {
     .select("_id firstName lastName stageName image")
     .exec()
     .then(allArtists => {
-        console.log(allArtists);
+        // console.log(allArtists);
         res.status(200).json({
             status: "SUCCESS",
             message: "Fetched all artists",
@@ -75,7 +74,7 @@ exports.get_artists = (req, res, next) => {
         });
     })
     .catch(error => {
-        console.log(error);
+        // console.log(error);
         res.status(400).json({
             message: "Bad Request"
         });
@@ -88,7 +87,7 @@ exports.get_artist =  (req, res, next) => {
     .select("_id firstName lastName stageName image")
     .exec()
     .then(thisArtist => {
-        console.log(thisArtist);
+        // console.log(thisArtist);
         res.status(200).json({
             status: "SUCCESS",
             message: "Fetched artist",
@@ -96,7 +95,7 @@ exports.get_artist =  (req, res, next) => {
         });
     })
     .catch(error => {
-        console.log(error);
+        // console.log(error);
         res.status(400).json({
             message: "Bad Request"
         });
@@ -118,7 +117,7 @@ exports.delete_artist = (req, res, next) => {
         });
     })
     .catch(error => {
-        console.log(error);
+        // console.log(error);
         res.status(400).json({
             message: "Unable to delete artist",
             data: error
