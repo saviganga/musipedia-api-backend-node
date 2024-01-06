@@ -21,3 +21,16 @@ variable "PRIVATE_KEY" {
   default = "musipedia-backend"
 
 }
+
+
+variable "AMIS" {
+  type = map(any)
+  default = {
+    us-east-1 = "ami-0c7217cdde317cfec"
+  }
+}
+
+variable "INSTALL_NODE_UBUNTU" {
+  default = "install-node.sh"
+}
+

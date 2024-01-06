@@ -59,4 +59,61 @@ resource "aws_security_group" "app" {
   }
 }
 
+resource "aws_security_group" "app_ssh" {
+  name        = "app_ssh-sg"
+  description = "Allow ssh inbound traffic"
 
+  ingress {
+    description      = "allow ssh access to ec2 instance"
+    from_port        = 0
+    to_port          = 0
+    protocol         = -1
+    cidr_blocks      = ["0.0.0.0/0"]
+    ipv6_cidr_blocks = ["::/0"]
+  }
+
+  egress {
+    from_port        = 0
+    to_port          = 0
+    protocol         = "-1"
+    cidr_blocks      = ["0.0.0.0/0"]
+    ipv6_cidr_blocks = ["::/0"]
+  }
+
+  tags = {
+    Name = "app_ssh"
+  }
+}
+
+# provision ec2 instance
+resource "aws_instance" "musipedia-instance" {
+  ami             = var.AMIS[var.REGION]
+  instance_type   = "t2.micro"
+  key_name        = aws_key_pair.musipedia-backend-key.key_name
+  security_groups = [aws_security_group.app_ssh.name, aws_security_group.app.name]
+
+  # create a connection to the ec2 instance to run provisioner commands
+  connection {
+    type        = "ssh"
+    user        = "ubuntu"
+    host        = self.public_ip
+    private_key = file("${path.module}/public-keys/${var.PRIVATE_KEY}")
+  }
+
+  ## provisioner to install ansible on the ec2 instance :
+  provisioner "file" {
+    source      = "${path.module}/scripts/${var.INSTALL_NODE_UBUNTU}"
+    destination = "/tmp/install-node.sh"
+  }
+  provisioner "remote-exec" {
+    inline = [
+      "sudo chmod u+x /tmp/install-node.sh",
+      "/tmp/install-node.sh",
+    ]
+  }
+
+  tags = {
+    Name = "musipedia instance"
+    User = "saviganga"
+  }
+}
