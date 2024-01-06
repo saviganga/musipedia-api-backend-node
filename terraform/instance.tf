@@ -5,39 +5,14 @@ resource "aws_key_pair" "musipedia-backend-key" {
 }
 
 # provision security groups
-resource "aws_security_group" "allow_ssh" {
-  name        = "musipedia-backend-sg"
-  description = "Allow ssh inbound traffic"
+
+
+resource "aws_security_group" "elb" {
+  name        = "elastic-load-balancer"
+  description = "Allow TLS inbound traffic from the internet"
 
   ingress {
-    description      = "allow ssh access to ec2 instance"
-    from_port        = 0
-    to_port          = 0
-    protocol         = -1
-    cidr_blocks      = ["0.0.0.0/0"]
-    ipv6_cidr_blocks = ["::/0"]
-  }
-
-  egress {
-    from_port        = 0
-    to_port          = 0
-    protocol         = "-1"
-    cidr_blocks      = ["0.0.0.0/0"]
-    ipv6_cidr_blocks = ["::/0"]
-  }
-
-  tags = {
-    Name = "allow_ssh"
-  }
-}
-
-resource "aws_security_group" "allow_tls" {
-  name        = "allow_tls"
-  description = "Allow TLS inbound traffic"
-#   vpc_id      = aws_vpc.main.id
-
-  ingress {
-    description      = "TLS from VPC"
+    description      = "Allow TLS inbound traffic from the internet"
     from_port        = 80
     to_port          = 80
     protocol         = "tcp"
@@ -54,6 +29,34 @@ resource "aws_security_group" "allow_tls" {
   }
 
   tags = {
-    Name = "allow_tls"
+    Name = "elastic-load-balancer"
   }
 }
+
+resource "aws_security_group" "app" {
+  name        = "app"
+  description = "Allow TLS inbound traffic from the elastic load balancer"
+
+  ingress {
+    description      = "Allow TLS inbound traffic from the elastic load balancer"
+    from_port        = 3000
+    to_port          = 3000
+    protocol         = "tcp"
+    security_groups      = [aws_security_group.elb.id]
+    ipv6_cidr_blocks = ["::/0"]
+  }
+
+  egress {
+    from_port        = 0
+    to_port          = 0
+    protocol         = "-1"
+    cidr_blocks      = ["0.0.0.0/0"]
+    ipv6_cidr_blocks = ["::/0"]
+  }
+
+  tags = {
+    Name = "app"
+  }
+}
+
+
