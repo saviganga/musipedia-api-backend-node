@@ -7,31 +7,40 @@ resource "aws_key_pair" "musipedia-backend-key" {
 # provision security groups
 
 
-resource "aws_security_group" "elb" {
-  name        = "elastic-load-balancer"
-  description = "Allow TLS inbound traffic from the internet"
+# resource "aws_security_group" "elb" {
+#   name        = "elastic-load-balancer"
+#   description = "Allow TLS inbound traffic from the internet"
 
-  ingress {
-    description      = "Allow TLS inbound traffic from the internet"
-    from_port        = 80
-    to_port          = 80
-    protocol         = "tcp"
-    cidr_blocks      = ["0.0.0.0/0"]
-    ipv6_cidr_blocks = ["::/0"]
-  }
+#   ingress {
+#     description      = "Allow TLS inbound traffic from the internet"
+#     from_port        = 80
+#     to_port          = 80
+#     protocol         = "tcp"
+#     cidr_blocks      = ["0.0.0.0/0"]
+#     ipv6_cidr_blocks = ["::/0"]
+#   }
 
-  egress {
-    from_port        = 0
-    to_port          = 0
-    protocol         = "-1"
-    cidr_blocks      = ["0.0.0.0/0"]
-    ipv6_cidr_blocks = ["::/0"]
-  }
+#   ingress {
+#     description      = "Allow TLS inbound traffic from the internet"
+#     from_port        = 443
+#     to_port          = 443
+#     protocol         = "tcp"
+#     cidr_blocks      = ["0.0.0.0/0"]
+#     ipv6_cidr_blocks = ["::/0"]
+#   }
 
-  tags = {
-    Name = "elastic-load-balancer"
-  }
-}
+#   egress {
+#     from_port        = 0
+#     to_port          = 0
+#     protocol         = "-1"
+#     cidr_blocks      = ["0.0.0.0/0"]
+#     ipv6_cidr_blocks = ["::/0"]
+#   }
+
+#   tags = {
+#     Name = "elastic-load-balancer"
+#   }
+# }
 
 resource "aws_security_group" "app" {
   name        = "app"
@@ -42,8 +51,9 @@ resource "aws_security_group" "app" {
     from_port        = 3000
     to_port          = 3000
     protocol         = "tcp"
-    security_groups      = [aws_security_group.elb.id]
-    ipv6_cidr_blocks = ["::/0"]
+    cidr_blocks      = ["0.0.0.0/0"]
+    # security_groups      = [aws_security_group.elb.id]
+    # ipv6_cidr_blocks = ["::/0"]
   }
 
   egress {
@@ -53,15 +63,6 @@ resource "aws_security_group" "app" {
     cidr_blocks      = ["0.0.0.0/0"]
     ipv6_cidr_blocks = ["::/0"]
   }
-
-  tags = {
-    Name = "app"
-  }
-}
-
-resource "aws_security_group" "app_ssh" {
-  name        = "app_ssh-sg"
-  description = "Allow ssh inbound traffic"
 
   ingress {
     description      = "allow ssh access to ec2 instance"
@@ -69,51 +70,185 @@ resource "aws_security_group" "app_ssh" {
     to_port          = 0
     protocol         = -1
     cidr_blocks      = ["0.0.0.0/0"]
-    ipv6_cidr_blocks = ["::/0"]
-  }
-
-  egress {
-    from_port        = 0
-    to_port          = 0
-    protocol         = "-1"
-    cidr_blocks      = ["0.0.0.0/0"]
-    ipv6_cidr_blocks = ["::/0"]
+    # ipv6_cidr_blocks = ["::/0"]
   }
 
   tags = {
-    Name = "app_ssh"
+    Name = "app"
   }
 }
+
+# resource "aws_security_group" "app_t" {
+#   name        = "app-t"
+#   description = "Allow TLS inbound traffic from the elastic load balancer"
+
+#   ingress {
+#     description      = "Allow TLS inbound traffic from the elastic load balancer"
+#     from_port        = 80
+#     to_port          = 80
+#     protocol         = "tcp"
+#     cidr_blocks      = ["0.0.0.0/0"]
+#     ipv6_cidr_blocks = ["::/0"]
+#   }
+
+#   egress {
+#     from_port        = 0
+#     to_port          = 0
+#     protocol         = "-1"
+#     cidr_blocks      = ["0.0.0.0/0"]
+#     ipv6_cidr_blocks = ["::/0"]
+#   }
+
+#   tags = {
+#     Name = "app-t"
+#   }
+# }
+
+# resource "aws_security_group" "app_ssh" {
+#   name        = "app_ssh-sg"
+#   description = "Allow ssh inbound traffic"
+
+  # ingress {
+  #   description      = "allow ssh access to ec2 instance"
+  #   from_port        = 0
+  #   to_port          = 0
+  #   protocol         = -1
+  #   cidr_blocks      = ["0.0.0.0/0"]
+  #   # ipv6_cidr_blocks = ["::/0"]
+  # }
+
+#   ingress {
+#     description      = "Allow TLS inbound traffic from the elastic load balancer"
+#     from_port        = 3000
+#     to_port          = 3000
+#     protocol         = "tcp"
+#     security_groups      = [aws_security_group.elb.id]
+#     # ipv6_cidr_blocks = ["::/0"]
+#   }
+
+#   ingress {
+#     description      = "Allow TLS inbound traffic from the elastic load balancer"
+#     from_port        = 80
+#     to_port          = 80
+#     protocol         = "tcp"
+#     cidr_blocks      = ["0.0.0.0/0"]
+#     # ipv6_cidr_blocks = ["::/0"]
+#   }
+
+#   ingress {
+#     description      = "Allow TLS inbound traffic from the elastic load balancer"
+#     from_port        = 443
+#     to_port          = 443
+#     protocol         = "tcp"
+#     cidr_blocks      = ["0.0.0.0/0"]
+#     # ipv6_cidr_blocks = ["::/0"]
+#   }
+
+#   egress {
+#     from_port        = 0
+#     to_port          = 0
+#     protocol         = "-1"
+#     cidr_blocks      = ["0.0.0.0/0"]
+#     ipv6_cidr_blocks = ["::/0"]
+#   }
+
+#   tags = {
+#     Name = "app_ssh"
+#   }
+# }
 
 # provision ec2 instance
 resource "aws_instance" "musipedia-instance" {
   ami             = var.AMIS[var.REGION]
   instance_type   = "t2.micro"
   key_name        = aws_key_pair.musipedia-backend-key.key_name
-  security_groups = [aws_security_group.app_ssh.name, aws_security_group.app.name]
+  security_groups = [aws_security_group.app.name]
 
-  # create a connection to the ec2 instance to run provisioner commands
-  connection {
-    type        = "ssh"
-    user        = "ubuntu"
-    host        = self.public_ip
-    private_key = file("${path.module}/public-keys/${var.PRIVATE_KEY}")
-  }
+  # # create a connection to the ec2 instance to run provisioner commands
+  # connection {
+  #   type        = "ssh"
+  #   user        = "ubuntu"
+  #   host        = self.public_ip
+  #   private_key = file("${path.module}/public-keys/${var.PRIVATE_KEY}")
+  # }
 
-  ## provisioner to install ansible on the ec2 instance :
-  provisioner "file" {
-    source      = "${path.module}/scripts/${var.INSTALL_NODE_UBUNTU}"
-    destination = "/tmp/install-node.sh"
-  }
-  provisioner "remote-exec" {
-    inline = [
-      "sudo chmod u+x /tmp/install-node.sh",
-      "/tmp/install-node.sh",
-    ]
-  }
+  # ## provisioner to install nodejs and npm on the ec2 instance :
+  # provisioner "file" {
+  #   source      = "${path.module}/scripts/${var.INSTALL_NODE_UBUNTU}"
+  #   destination = "/tmp/install-node.sh"
+  # }
+
+  
+
+
+  # provisioner "remote-exec" {
+  #   inline = [
+  #     "sudo chmod u+x /tmp/install-node.sh",
+  #     "sudo /tmp/install-node.sh < /dev/null",  # Redirect input to avoid prompts
+  #   ]
+  # }
+
+#   provisioner "file" {
+#     source      = "/Users/saviganga/Documents/working-boy/js/musipedia-api-backend-node/api/"
+#     destination = "/home/ubuntu/app/"
+#   }
+
+#   provisioner "file" {
+#     source      = "/Users/saviganga/Documents/working-boy/js/musipedia-api-backend-node/node_modules/"
+#     destination = "/home/ubuntu/app/"
+#   }
+
+# #   provisioner "file" {
+# #     source      = "/Users/saviganga/Documents/working-boy/js/musipedia-api-backend-node/uploads/"
+# #     destination = "/home/ubuntu/app/"
+# #   }
+
+#   provisioner "file" {
+#     source      = "/Users/saviganga/Documents/working-boy/js/musipedia-api-backend-node/api/app.js"
+#     destination = "/home/ubuntu/app/app.js"
+#   }
+
+#   provisioner "file" {
+#     source      = "/Users/saviganga/Documents/working-boy/js/musipedia-api-backend-node/package-lock.json/"
+#     destination = "/home/ubuntu/app/package-lock.json"
+#   }
+
+#   provisioner "file" {
+#     source      = "/Users/saviganga/Documents/working-boy/js/musipedia-api-backend-node/package.json/"
+#     destination = "/home/ubuntu/app/package.json"
+#   }
+
+#   provisioner "file" {
+#     source      = "/Users/saviganga/Documents/working-boy/js/musipedia-api-backend-node/server.js/"
+#     destination = "/home/ubuntu/app/server.js"
+#   }
+
+  
 
   tags = {
     Name = "musipedia instance"
     User = "saviganga"
   }
+
+  
 }
+
+output "public_ip" {
+    value = aws_instance.musipedia-instance.public_ip
+  }
+
+
+
+# # provision ec2 instance
+# resource "aws_instance" "instance" {
+#   ami             = var.AMIS[var.REGION]
+#   instance_type   = "t2.micro"
+#   key_name        = aws_key_pair.musipedia-backend-key.key_name
+#   security_groups = [aws_security_group.elb.name]
+
+#   tags = {
+#     Name = "instance"
+#     User = "saviganga"
+#   }
+# }
+
