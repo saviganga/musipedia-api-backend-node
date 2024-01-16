@@ -8,7 +8,7 @@ variable "KEY_NAME" {
 
 variable "PUBLIC_KEY" {
   type    = string
-  default = "musipedia-backend.pub"
+  default = "mb.pub"
 }
 
 variable "KEY_PAIR_NAME" {
