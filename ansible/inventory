@@ -1,4 +1,4 @@
-web ansible_host=54.82.125.108 #how to read from the configured terraform instance
+web ansible_host=3.91.22.115
 
 [servers]
 web

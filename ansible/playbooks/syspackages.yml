@@ -1,0 +1,17 @@
+---
+- name: Install Node.js and npm on AWS Ubuntu
+  hosts: servers
+  become: true
+
+  tasks:
+    - name: Update apt cache
+      apt:
+        update_cache: yes
+
+    - name: Install Node.js and npm
+      apt:
+        name: "{{ item }}"
+        state: present
+      loop:
+        - nodejs
+        - npm
