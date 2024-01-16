@@ -22,9 +22,6 @@ mongoose.connect(process.env.MONGO_ATLAS_URL)
   .catch(error => console.log(`Connection error to Cloud Server. [Issue]: ${error}`));
 
 
-  // mongoose.connect('mongodb+srv://saviganga:casa1234@musipediadb.yjiqo.mongodb.net/?retryWrites=true&w=majority')
-// mongoose.connect('mongodb+srv://saviganga:' + process.env.DB_PASSWORD + '@musipediadb.yjiqo.mongodb.net/?retryWrites=true&w=majority');
-
 // setting the logs
 app.use(morgan('dev'));
 

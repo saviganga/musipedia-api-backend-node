@@ -1,0 +1,8 @@
+web ansible_host=54.82.125.108 #how to read from the configured terraform instance
+
+[servers]
+web
+
+[servers:vars]
+ansible_user=ubuntu
+ansible_ssh_private_key_file=pub-keys/mb
