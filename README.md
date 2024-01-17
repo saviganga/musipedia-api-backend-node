@@ -60,7 +60,7 @@ This project showcases:
 - ANSIBLE
 
 1. navigate to './devops/ansible/' directory
-2. update the inventory file's 'ansible_host' variable with the 'public_ip' gotten from the terraform configuration
+2. update the inventory file with the appropriate values. ('ansible_host' is the 'public_ip' gotten from the terraform configuration)
 3. REMEMBER TO CREATE YOUR '.env' FILE USING THE 'env.example' FILE
 4. run the playblooks:
     - ansible-playbook -i inventory playbooks/syspackages.yml 
