@@ -1,0 +1,44 @@
+---
+- name: Copy Github ssh key files to Ansible Machine
+  hosts: servers
+  become: true
+
+  tasks:
+    - name: Ensure the remote directory exists
+      file:
+        path: "{{ remote_key_path }}"
+        state: directory
+
+    - name: Copy the file to the remote machine
+      copy:
+        src: "{{ local_key_file_path }}"
+        dest: "{{ remote_key_path }}"
+
+    - name: Run a command on the remote machine
+      command: "chmod 400 {{ remote_key_path }}/{{ private_key }}"
+
+
+
+- name: Clone Application Repository
+  hosts: servers
+  become: true
+
+  tasks:
+    - name: Ensure the target directory exists
+      file:
+        path: "{{ target_directory }}"
+        state: directory
+
+    - name: Clone the GitHub repository
+      git:
+        repo: "{{ github_repo_url }}"
+        dest: "{{ target_directory }}"
+        version: "main"
+        accept_hostkey: yes
+        key_file: "{{ remote_key_path }}/{{ private_key }}"
+
+    - name: Change ownership of the target directory
+      ansible.builtin.command:
+        cmd: "sudo chown -R $USER:$USER {{ target_directory }}"
+
+  
