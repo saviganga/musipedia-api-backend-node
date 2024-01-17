@@ -2,7 +2,7 @@ nodemon.json
 node_modules/
 uploads/
 .env
-
+*scripts
 *public-keys
 *pub-keys
 

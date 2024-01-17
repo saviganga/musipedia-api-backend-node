@@ -30,7 +30,3 @@ variable "AMIS" {
   }
 }
 
-variable "INSTALL_NODE_UBUNTU" {
-  default = "install-node.sh"
-}
-
