@@ -8,8 +8,6 @@ Welcome to Musipedia Node Backend! This project is part of the DevOps Challenge 
 
 - use env.example file to fill up your .env in the root directory, and './devops/ansible/' directory
 
--🚨 Remember to run 'terraform destroy' in the terraform directory to destroy the provisioned infrastructure. Unless you're RICH RICH, then you can leave them running 🚨
-
 This project showcases:
 - Terraform: Builds rock-solid infrastructure.
 - Ansible: Tweaks the OS with finesse.
@@ -68,4 +66,8 @@ This project showcases:
     - ansible-playbook -i inventory playbooks/syspackages.yml 
     - ansible-playbook -i inventory playbooks/clonerepo.yml 
     - ansible-playbook -i inventory playbooks/startapp.yml 
+
+
+##
+🚨 Remember to run 'terraform destroy' in the terraform directory to destroy the provisioned infrastructure. Unless you're RICH RICH, then you can leave them running 🚨
 
