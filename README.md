@@ -71,3 +71,4 @@ This project showcases:
 ##
 🚨 Remember to run 'terraform destroy' in the terraform directory to destroy the provisioned infrastructure. Unless you're RICH RICH, then you can leave them running 🚨
 
+
