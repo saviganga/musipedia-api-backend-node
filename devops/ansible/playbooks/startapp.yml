@@ -1,0 +1,10 @@
+---
+- name: Start the application
+  hosts: servers
+  become: true
+
+  tasks:
+    - name: start app
+      ansible.builtin.shell:
+        cmd: "npm start"
+        chdir: "{{ target_directory }}"

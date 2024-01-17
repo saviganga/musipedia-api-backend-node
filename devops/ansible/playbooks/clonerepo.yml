@@ -14,7 +14,7 @@
         src: "{{ local_key_file_path }}"
         dest: "{{ remote_key_path }}"
 
-    - name: Run a command on the remote machine
+    - name: Modify private key permission
       command: "chmod 400 {{ remote_key_path }}/{{ private_key }}"
 
 
@@ -40,5 +40,15 @@
     - name: Change ownership of the target directory
       ansible.builtin.command:
         cmd: "sudo chown -R $USER:$USER {{ target_directory }}"
+
+    - name: Copy the .env file to the remote machine
+      copy:
+        src: "{{ local_env_file_path }}"
+        dest: "{{ remote_env_path }}"
+
+    - name: Install npm dependencies
+      ansible.builtin.shell:
+        cmd: "npm install"
+        chdir: "{{ target_directory }}"
 
   

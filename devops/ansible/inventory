@@ -1,5 +1,5 @@
 # find a way to pass the ip address from the created terraform instance
-web ansible_host=52.87.145.119
+web ansible_host=44.211.44.38
 
 [servers]
 web
@@ -16,3 +16,5 @@ ssh_key_comment=ansible_ssh_key
 private_key=id_ansible
 nodejs_version=v21.2.0
 npm_version=10.2.3
+local_env_file_path=../.env
+remote_env_path=/home/ubuntu/app/web/.env
