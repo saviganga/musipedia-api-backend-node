@@ -3,10 +3,12 @@
 Wagwan,
 Welcome to Musipedia Node Backend! This project is part of the DevOps Challenge Series, promising more updates and magic as we go along.
 
-# HOLD UP! 🎩✨
+# HOLD UP! 🚨🎩✨
 - Usually, I make things a breeze with one-click magic scripts. But, I'm learning to make Terraform and Ansible dance seamlessly. Stay tuned for the magic!
 
 - use env.example file to fill up your .env in the root directory, and './devops/ansible/' directory
+
+-🚨 Remember to run 'terrafoorm destroy' in the terraform directory to destroy the provisioned infrastructure. Unless you're RICH RICH, then you can leave them running 🚨
 
 This project showcases:
 - Terraform: Builds rock-solid infrastructure.
@@ -14,7 +16,7 @@ This project showcases:
 - A smooth blend of a node.js app with MongoDB.
 - All dancing in the clouds of AWS.
 
-# PREREQUISITES
+# COOKING INGREDIENTS 🛠️
 1. terraform
 2. ansible
 3. nodejs
@@ -66,3 +68,4 @@ This project showcases:
     - ansible-playbook -i inventory playbooks/syspackages.yml 
     - ansible-playbook -i inventory playbooks/clonerepo.yml 
     - ansible-playbook -i inventory playbooks/startapp.yml 
+
