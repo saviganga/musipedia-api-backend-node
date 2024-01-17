@@ -17,6 +17,15 @@ resource "aws_security_group" "app" {
     cidr_blocks      = ["0.0.0.0/0"]
   }
 
+  # Rule for HTTPS traffic (port 443)
+  ingress {
+    description      = "Allow HTTPS inbound traffic from the internet"
+    from_port        = 443
+    to_port          = 443
+    protocol         = "tcp"
+    cidr_blocks      = ["0.0.0.0/0"]
+  }
+
   egress {
     from_port        = 0
     to_port          = 0
@@ -57,4 +66,8 @@ resource "aws_instance" "musipedia-instance" {
 # print out some output
 output "public_ip" {
     value = aws_instance.musipedia-instance.public_ip
+  }
+
+output "public_dns" {
+    value = aws_instance.musipedia-instance.public_dns
   }
