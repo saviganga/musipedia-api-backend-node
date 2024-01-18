@@ -46,7 +46,7 @@
         src: "{{ local_env_file_path }}"
         dest: "{{ remote_env_path }}"
 
-    - name: Install npm dependencies
+    - name: Install application dependencies
       ansible.builtin.shell:
         cmd: "npm install"
         chdir: "{{ target_directory }}"
