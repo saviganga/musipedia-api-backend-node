@@ -14,7 +14,6 @@ const albumRoutes = require('./api/routes/albums');
 const songRoutes = require('./api/routes/songs');
 const userRoutes = require('./api/routes/user');
 const xauthRoutes = require('./api/routes/xauth');
-console.log(process.env.MONGO_ATLAS_URL)
 // make a connection to the mongoBD database
 mongoose.set("strictQuery", false);
 mongoose.connect(process.env.MONGO_ATLAS_URL)
