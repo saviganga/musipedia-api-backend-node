@@ -3,6 +3,12 @@
 Wagwan,
 Welcome to Musipedia Node Backend! This project is part of the DevOps Challenge Series, promising more updates and magic as we go along.
 
+# SUMMARY
+In this project, we have 3 objectives
+1. Provision cloud infrastructure using Terraform
+2. Configure provisioned infrastructure using Ansible
+3. Deploy node.js application on the configured infrastructure
+
 # HOLD UP! 🚨🎩✨
 - Usually, I make things a breeze with one-click magic scripts. But, I'm learning to make Terraform and Ansible dance seamlessly. Stay tuned for the magic!
 
